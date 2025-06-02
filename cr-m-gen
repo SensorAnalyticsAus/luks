@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if [[ $# -ne 4 ]]; then
+ echo "usage {encrypted_container} {crypt_dev_id} {mount_point} {type:"
+ echo "plain|luks|loopaes|tcrypt|tcrypt-hidden|bitlk}"
+ exit 1
+fi
+
+if [[ $4 -eq "tcrypt-hidden" ]]; then
+ sudo cryptsetup --tcrypt-hidden tcryptOpen $1 $2
+else
+ sudo cryptsetup $4Open $1 $2
+fi
+sudo mount -t auto -o uid=durrans,gid=durrans /dev/mapper/$2 $3
+if [[ $? -eq 0 ]]; then
+ echo "$1 mounted successfully at $3"
+ echo "crypt_dev_ID for unmounting and securing this vol ==> $2"
+fi

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [[ $# -ne 3 ]]; then
+ echo "usage {encrypted_container} {crypt_dev_id} {mount_point}"
+ exit 1
+fi
+
+sudo cryptsetup luksOpen $1 $2
+sudo mount -t auto /dev/mapper/$2 $3
+if [[ $? -eq 0 ]]; then
+ echo "$1 mounted successfully at $3"
+ echo "crypt_dev_ID for unmounting and securing this vol ==> $2"
+fi

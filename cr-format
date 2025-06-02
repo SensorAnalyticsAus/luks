@@ -1,0 +1,42 @@
+#!/bin/bash
+# Requires
+# sudo apt install cryptsetup
+# sudo apt-get install uuid-runtime
+
+CRDEV=`uuidgen`
+ 
+if [[ $# -ne 2 ]]; then
+ echo "usage: {disk_name} {mnt_point}"
+ echo "Example: test.img ./mytmp"
+ exit 1
+fi
+
+LDEV=`sudo losetup -f --show $1`
+echo "Loop device ${LDEV} created"
+sudo cryptsetup luksFormat $LDEV
+#echo "Verify crypt vol is formatted"
+#sudo cryptsetup luksDump $LDEV 
+sudo cryptsetup luksOpen $LDEV $CRDEV
+sudo mkfs.ext4 /dev/mapper/$CRDEV
+if [[ $? -eq 0 ]]; then
+ echo "crypt luks vol $1 successfull created"
+else
+ echo "crypt luks vol creation failed"
+fi
+# mount change ownership unmount
+sudo mount -t auto /dev/mapper/$CRDEV $2
+sudo chown -R `whoami`:`whoami` $2
+sudo umount /dev/mapper/$CRDEV
+echo "ownership handover done" 
+echo "closing crypt vol $1"
+sudo cryptsetup luksClose $CRDEV 
+if [[ $? -ne 0 ]]; then
+ echo "closing crypt luks vol $1 failed"
+fi
+echo "closing loop device $LDEV"
+sudo losetup -d $LDEV
+if [[ $? -ne 0 ]]; then
+ echo "closing loop dev $LPDEV  failed"
+ exit 1
+fi
+echo "Encrypted vol $1 is Ready for use"

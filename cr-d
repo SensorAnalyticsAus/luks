@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [[ $# -ne 1 ]]; then
+ echo "usage: {crypt_dev_ID}"
+ exit 1
+fi
+sudo umount /dev/mapper/$1
+sudo cryptsetup luksClose $1
+if [[ $? -eq 0 ]]; then
+ echo "vol unmounted and secured"
+else
+ echo "vol is still mounted/insecure"
+ exit 1
+fi
+
