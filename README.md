@@ -18,6 +18,14 @@ cr-disk test.img 24 M ./mytmp
 Then follow the prompts.
 NB: Remember to type YES (and not yes)
 
+Alternatively a volume, created using `dd` directly, can be later encrypted with `cr-format` .
+```
+dd if=/dev/urandom of=test.img bs=256M count=4 status=progress iflag=fullblock
+
+cr-format test.img ./mttmp
+```
+
+
 ### Mount Encrypted Volume
 ```
 cr-m test.img test ./mytmp
