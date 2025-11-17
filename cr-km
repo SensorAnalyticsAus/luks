@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ $# -lt 3 ]]; then
+if [[ $# -lt 4 ]]; then
  echo "usage {encrypted_container} {crypt_dev_id} {mount_point} {keyfile}"
  exit 1
 fi
