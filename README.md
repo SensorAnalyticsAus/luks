@@ -27,8 +27,13 @@ cr-format test.img ./mttmp
 
 
 ### Mount Encrypted Volume
+Using password:
 ```
 cr-m test.img test ./mytmp
+```
+Using keyfile:
+```
+cr-km test.img test ./mytmp
 ```
 Check `mytmp` is mounted with `df -H` then copy some files.
 
