@@ -6,7 +6,8 @@ if [[ $# -ne 4 ]]; then
  exit 1
 fi
 
-if [[ $4 -eq "tcrypt-hidden" ]]; then
+if [ "$4" == "tcrypt-hidden" ]; then
+ echo "$4"
  sudo cryptsetup --tcrypt-hidden tcryptOpen $1 $2
 else
  sudo cryptsetup $4Open $1 $2
